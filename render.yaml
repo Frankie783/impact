@@ -1,0 +1,17 @@
+
+services:
+  - type: web
+    name: made2flow-impact
+    env: node
+    buildCommand: "npm install"
+    startCommand: "npm run start"
+    envVars:
+      - key: USER_ID
+        sync: false
+      - key: SECRET
+        sync: false
+
+cronJobs:
+  - name: fetch-daily-impact
+    schedule: "30 0 * * *"
+    command: "npm run fetch"
