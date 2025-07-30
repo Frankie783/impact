@@ -8,7 +8,7 @@ const SECRET = process.env.SECRET;
 
 async function fetchImpactData() {
   try {
-    const response = await axios.get("https://api.made2flow.com/v1/scope3/reports/2025", {
+    const response = await axios.get("https://api.made2flow.com/v1/scope3/reports/2024", {
       headers: {
         "X-API-KEY": SECRET
       }
