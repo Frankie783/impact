@@ -1,6 +1,6 @@
-
 const axios = require("axios");
 const fs = require("fs");
+const path = require("path"); // ← ADD THIS
 require("dotenv").config();
 
 const USER_ID = process.env.USER_ID;
@@ -23,10 +23,11 @@ async function fetchImpactData() {
       last_updated: new Date().toISOString()
     };
 
-    fs.writeFileSync("impact.json", JSON.stringify(data, null, 2));
-    console.log("Impact data saved.");
+    const filePath = path.join(__dirname, "impact.json"); // ← ✅ SAVE IN SAME FOLDER
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    console.log("✅ Impact data saved:", filePath);
   } catch (error) {
-    console.error("Failed to fetch impact data:", error.message);
+    console.error("❌ Failed to fetch impact data:", error.message);
   }
 }
 
