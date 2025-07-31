@@ -45,7 +45,7 @@ async function fetchImpactData() {
       throw new Error("Could not find a report with all required impact values.");
     }
 
-    const filePath = path.join(__dirname, "impact.json");
+    const filePath = path.join(__dirname, "public", "impact.json");
     fs.writeFileSync(filePath, JSON.stringify(impactData, null, 2));
     console.log("✅ Successfully wrote impact.json at", filePath);
 
