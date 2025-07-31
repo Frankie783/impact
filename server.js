@@ -1,14 +1,14 @@
+
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 
-const app = express(); // ✅ define app before using it
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("public")); // ✅ serve public files like /impact.json
+app.use(express.static("public"));
 
-// 🔍 GET from impact.json in the public folder
 app.get("/api/impact", (req, res) => {
   const filePath = path.join(__dirname, "public", "impact.json");
   console.log("📦 Reading impact.json from:", filePath);
@@ -23,7 +23,6 @@ app.get("/api/impact", (req, res) => {
   }
 });
 
-// 🔁 Trigger fetchData.js
 app.get("/api/refresh", (req, res) => {
   console.log("🔄 Running fetchData.js to refresh impact.json...");
 

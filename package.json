@@ -1,6 +1,6 @@
 
 {
-  "name": "made2flow-impact",
+  "name": "impact-api",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {

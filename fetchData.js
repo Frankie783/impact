@@ -1,3 +1,4 @@
+
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
@@ -46,6 +47,7 @@ async function fetchImpactData() {
     }
 
     const filePath = path.join(__dirname, "public", "impact.json");
+    console.log("🧪 Writing to:", filePath);
     fs.writeFileSync(filePath, JSON.stringify(impactData, null, 2));
     console.log("✅ Successfully wrote impact.json at", filePath);
 
