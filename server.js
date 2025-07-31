@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get("/api/impact", (req, res) => {
-  const filePath = path.join(__dirname, "impact.json");
+  const filePath = "/opt/render/project/go/src/github.com/Frankie783/impact/impact.json";
   console.log("📦 Reading impact.json from:", filePath);
 
   try {
