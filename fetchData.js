@@ -9,27 +9,30 @@ async function fetchImpactData() {
   try {
     const response = await axios.get("https://api.made2flow.com/v1/scope3/reports/2024", {
       headers: {
-        "X-API-KEY": SECRET
-      }
+        "X-API-KEY": SECRET,
+      },
     });
 
-    const report = response.data[0];
-
-    if (!report || !report.dpp || !report.dpp.impact) {
-      console.warn("❗ No impact data found.");
-      return;
+    const result = response.data[0]; // first item
+    if (!result || !result.dpp || !result.dpp.impact) {
+      throw new Error("No impact data found in API response.");
     }
 
-    const fullImpact = {
-      ...report.dpp.impact,
-      last_updated: new Date().toISOString()
+    const impact = result.dpp.impact;
+
+    const data = {
+      water_use: impact.water_use,
+      ecotoxicity_freshwater: impact.ecotoxicity_freshwater,
+      ozone_depletion: impact.ozone_depletion,
+      particulate_matter: impact.particulate_matter,
+      last_updated: new Date().toISOString(),
     };
 
-    const filePath = path.join(__dirname, "impact.json");
-    fs.writeFileSync(filePath, JSON.stringify(fullImpact, null, 2));
-    console.log("✅ Impact data saved:", filePath);
+    const outputPath = path.join(__dirname, "impact.json");
+    fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
+    console.log("✅ Impact data saved to", outputPath);
   } catch (error) {
-    console.error("❌ Failed to fetch impact data:", error.message);
+    console.error("❌ Failed to fetch or parse impact data:", error.message);
   }
 }
 
