@@ -13,26 +13,44 @@ async function fetchImpactData() {
       },
     });
 
-    const result = response.data[0]; // first item
-    if (!result || !result.dpp || !result.dpp.impact) {
-      throw new Error("No impact data found in API response.");
+    const reports = response.data;
+    console.log(`🔍 Found ${reports.length} reports`);
+
+    let impactData = null;
+
+    for (const report of reports) {
+      if (report.dpp && report.dpp.impact) {
+        const impact = report.dpp.impact;
+
+        const allKeysPresent =
+          impact.water_use !== undefined &&
+          impact.ecotoxicity_freshwater !== undefined &&
+          impact.ozone_depletion !== undefined &&
+          impact.particulate_matter !== undefined;
+
+        if (allKeysPresent) {
+          impactData = {
+            water_use: impact.water_use,
+            ecotoxicity_freshwater: impact.ecotoxicity_freshwater,
+            ozone_depletion: impact.ozone_depletion,
+            particulate_matter: impact.particulate_matter,
+            last_updated: new Date().toISOString(),
+          };
+          break;
+        }
+      }
     }
 
-    const impact = result.dpp.impact;
+    if (!impactData) {
+      throw new Error("Could not find a report with all required impact values.");
+    }
 
-    const data = {
-      water_use: impact.water_use,
-      ecotoxicity_freshwater: impact.ecotoxicity_freshwater,
-      ozone_depletion: impact.ozone_depletion,
-      particulate_matter: impact.particulate_matter,
-      last_updated: new Date().toISOString(),
-    };
+    const filePath = path.join(__dirname, "impact.json");
+    fs.writeFileSync(filePath, JSON.stringify(impactData, null, 2));
+    console.log("✅ Successfully wrote impact.json at", filePath);
 
-    const outputPath = path.join(__dirname, "impact.json");
-    fs.writeFileSync(outputPath, JSON.stringify(data, null, 2));
-    console.log("✅ Impact data saved to", outputPath);
   } catch (error) {
-    console.error("❌ Failed to fetch or parse impact data:", error.message);
+    console.error("❌ Error during fetch or parse:", error.message);
   }
 }
 
